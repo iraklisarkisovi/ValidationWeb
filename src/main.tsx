@@ -5,11 +5,17 @@ import { client } from './QueryMain/QueryMainClient.ts'
 import { Provider } from 'react-redux'
 import { store } from './ReduxMainToolkit/ReduxMainStore.ts'
 import "./input.css"
+import { AuthProvider } from './Components/Auth.tsx'
+import { BrowserRouter } from 'react-router-dom'
 
 createRoot(document.getElementById('root')!).render(
   <Provider store={store}>  
     <QueryClientProvider client={client}>
-      <App />
+      <AuthProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </AuthProvider>
     </QueryClientProvider>
   </Provider>
 )

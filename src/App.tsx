@@ -1,13 +1,17 @@
-import MainPage from './Components/MainPage';
+import { Route, Routes } from 'react-router-dom';
+import Login from './Components/LoginForm';
+import Register from './Components/RegisterForm';
+import Dashboard from './Components/Dashboard';
 
 function App() {
 
   return (
     <>
-      <div className="flex items-center justify-center min-h-screen">
-        {/* Routes instead MainPage */}
-        <MainPage />
-      </div>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
     </>
   );
 }
