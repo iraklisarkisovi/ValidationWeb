@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const apikey = "JFD46TYzRerEZtYOYk0Mq3gf8O672ogYqLuh9fk6VeC_1tPcOw";
+const apikey = import.meta.env.VITE_API_KEY;
 
 const api = axios.create({
   baseURL: "https://crudapi.co.uk/api/v1/probe",

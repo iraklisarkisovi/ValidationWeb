@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "./Auth";
 
 const Login: React.FC = () => {
@@ -59,6 +59,9 @@ const Login: React.FC = () => {
             Login
           </button>
         </div>
+        <Link to="/register">
+          <h1 className="mt-3 text-center">Register</h1>
+        </Link>
       </form>
     </div>
   );
