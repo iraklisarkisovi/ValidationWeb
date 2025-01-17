@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LocationInput from "./LocationInput";
+import { useSelector } from "react-redux";
+import { RootState } from "../ReduxMainToolkit/ReduxMainStore";
 
 const Register = () => {
+  const init = useSelector((state: RootState) => state.mainSore.RegisterInput.Location.LatLanUser)
   const [formData, setFormData] = useState({
     fullname: '',
     email: "",
@@ -21,6 +24,7 @@ const Register = () => {
   ];
 
   const navigate = useNavigate();
+  console.log(init);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
