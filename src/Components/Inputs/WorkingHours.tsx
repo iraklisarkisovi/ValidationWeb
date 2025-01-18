@@ -8,7 +8,7 @@ const workingHours = Array.from({ length: 48 }, (_, index) => {
 
 const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-const CourierForm = () => {
+const WorkingHours = () => {
   interface WorkingDay {
     day: string;
     startHour: string;
@@ -100,4 +100,4 @@ const CourierForm = () => {
   );
 };
 
-export default CourierForm;
+export default WorkingHours;

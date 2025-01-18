@@ -1,23 +1,21 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import LocationInput from "./LocationInput";
+import AdminForm from "./Admin/AdminFrom";
+import UserForm from "./User/UserForm";
+import CourierForm from "./Courier/CourierForm";
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    fullname: '',
+    fullname: "",
     email: "",
     password: "",
-    role: "",  
+    role: "",
   });
 
   const options = [
-    {role: 'user'},
-    {role: 'admin'},
-    {role: 'curier'}
-  ]
-
-  const Curier = [
-    { freetime: 'time'},
+    { role: "user" },
+    { role: "admin" },
+    { role: "curier" },
   ];
 
   const navigate = useNavigate();
@@ -36,72 +34,22 @@ const Register = () => {
       >
         <h1 className="mb-6 text-2xl font-semibold text-center">Register</h1>
 
-        <div className="mb-4">
-          <input
-            type="type"
-            placeholder="Full name"
-            value={formData.fullname}
-            onChange={(e) => setFormData({ ...formData, fullname: e.target.value })}
-            required
-            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <div className="mb-4">
-          <input
-            type="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
-            }
-            required
-            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <div className="mb-4">
-          <input
-            type="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
-            required
-            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-        {formData.role === "curier" &&
-          Curier.map((item) => (
-            <>
-              <h1 className="text-center">
-                Input your maximum availability during the day
-              </h1>
-              <input
-                type={item.freetime}
-                className="flex self-center mb-4 justify-self-center"
-              />
-              <h1 className="text-center">Input suitable day to work weekly</h1>
-              <input
-                type="date"
-                className="flex self-center justify-self-center "
-              />
-              <LocationInput />
-            </>
-          ))}
-
         <div className="mb-6">
           <select
             value={formData.role}
             onChange={(e) => setFormData({ ...formData, role: e.target.value })}
             className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
+            <option value="" disabled>Select Role</option>
             {options.map(({ role }) => (
-              <option value={role}>{role}</option>
+              <option key={role} value={role}>{role}</option>
             ))}
           </select>
         </div>
+
+        {formData.role === "admin" && <AdminForm/>}
+        {formData.role === "user" && <UserForm />}
+        {formData.role === "curier" && <CourierForm />}
 
         <div>
           <button

@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 import { useDispatch } from "react-redux";
-import { LatLanInput } from "../ReduxMainToolkit/ReduxMainSlice";
+import { LatLanInput } from "../../ReduxMainToolkit/ReduxMainSlice";
 
 const apiKey: string = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 const LocationInput: React.FC = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [location, setLocation] = useState<string>("");
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [marker, setMarker] = useState<google.maps.Marker | null>(null);
@@ -16,7 +16,6 @@ const LocationInput: React.FC = () => {
 
   useEffect(() => {
     const loader = new Loader({
-      
       apiKey: apiKey,
       libraries: ["places"],
     });
@@ -26,7 +25,7 @@ const LocationInput: React.FC = () => {
       .then(() => {
         if (mapRef.current && !map) {
           const googleMap = new google.maps.Map(mapRef.current, {
-            center: { lat: 0, lng: 0 }, 
+            center: { lat: 0, lng: 0 },
             zoom: 2,
           });
 
@@ -34,25 +33,22 @@ const LocationInput: React.FC = () => {
 
           googleMap.addListener("dblclick", (event: { latLng: google.maps.LatLng | google.maps.LatLngLiteral; }) => {
             console.log("Double-click event:", event.latLng);
-            placeMarker(event.latLng);
+            placeMarker(event.latLng);  // Places a marker on double-click
           });
         }
 
         if (inputRef.current) {
-          autocompleteRef.current = new google.maps.places.Autocomplete(
-            inputRef.current
-          );
-
+          autocompleteRef.current = new google.maps.places.Autocomplete(inputRef.current);
           autocompleteRef.current.addListener("place_changed", () => {
             const place = autocompleteRef.current?.getPlace();
             if (place) {
               setLocation(place.formatted_address || place.name || "");
               const selectedLocation = place.geometry?.location;
               if (selectedLocation) {
-                dispatch(LatLanInput(selectedLocation));
+                dispatch(LatLanInput(selectedLocation));  // Dispatches selected location
                 map?.setCenter(selectedLocation);
                 map?.setZoom(14);
-                placeMarker(selectedLocation); 
+                placeMarker(selectedLocation);  // Place marker for selected location
               }
             }
           });
@@ -63,20 +59,22 @@ const LocationInput: React.FC = () => {
       });
   }, [map]);
 
-  const placeMarker = (
-    position: google.maps.LatLng | google.maps.LatLngLiteral
-  ) => {
+  // Place marker if it doesn't exist, or move existing one
+  const placeMarker = (position: google.maps.LatLng | google.maps.LatLngLiteral) => {
     if (marker) {
-      marker.setPosition(position); 
+      const currentPosition = marker.getPosition();
+      if (!currentPosition || !currentPosition.equals(position)) {
+        marker.setPosition(position);
+      }
     } else {
       const newMarker = new google.maps.Marker({
         position: position,
         map: map,
       });
-      setMarker(newMarker); 
+      setMarker(newMarker);
     }
   };
- 
+
   return (
     <div style={{ margin: "20px" }}>
       <h2>Google Maps Location Input</h2>
