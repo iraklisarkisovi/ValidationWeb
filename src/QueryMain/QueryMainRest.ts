@@ -1,26 +1,27 @@
 import axios from "axios";
 
-const apikey = import.meta.env.VITE_API_KEY;
+const url = "https://crudapi.co.uk/api/v1/users";
+const apiKey = import.meta.env.VITE_DBAPI_KEY;
 
-const api = axios.create({
-  baseURL: "https://crudapi.co.uk/api/v1/probe",
-  headers: {
-    Authorization: `Bearer ${apikey}`,
-  },
-});
 
-const registerUser = async (email: string, password: string) => {
+export const DBPost = async (data: any) => {
   try {
-    const response = await api.post("/register", { email, password });
-    console.log("Registration successful:", response.data);
+    const response = await axios.post(url, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+    });
+
+    console.log("Data posted successfully:", response.data);
     return response.data;
   } catch (error) {
-    console.error("Error registering:");
-    throw error;
+ 
+    if (error ) {
+      console.error("Error posting data:", error);
+    } else {
+ 
+      console.error("Error posting data:", error);
+    }
   }
 };
-
-const email = "newuser@example.com";
-const password = "password123";
-
-registerUser(email, password);

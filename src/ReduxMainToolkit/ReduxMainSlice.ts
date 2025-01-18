@@ -1,9 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+ 
 const initialState = {
   RegisterInput: {
-    Location: {
-      LatLanUser: {},
+    LatLanUser: {},  
+    RegisteredUser: {
+      fullname: "",
+      email: "",
+      password: "",
+      role: "",
     },
   },
 };
@@ -13,14 +17,23 @@ const MainReducer = createSlice({
   initialState,
   reducers: {
     HandleInput: (state, action) => {
-      state.RegisterInput = action.payload; 
+      state.RegisterInput = action.payload;
     },
 
     LatLanInput: (state, action) => {
-      state.RegisterInput.Location.LatLanUser = action.payload;  
+      state.RegisterInput.LatLanUser = action.payload;
+    },
+
+    RegUserEventtarget: (state, action) => {
+      state.RegisterInput.RegisteredUser = {
+        ...state.RegisterInput.RegisteredUser,  
+        ...action.payload, 
+      };
     },
   },
 });
 
-export const { HandleInput, LatLanInput } = MainReducer.actions;
+
+export const { HandleInput, LatLanInput, RegUserEventtarget } =
+  MainReducer.actions;
 export const MainRed = MainReducer.reducer;

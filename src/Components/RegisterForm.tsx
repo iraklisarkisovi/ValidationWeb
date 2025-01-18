@@ -1,35 +1,46 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LocationInput from "./LocationInput";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../ReduxMainToolkit/ReduxMainStore";
+import { RegUserEventtarget } from "../ReduxMainToolkit/ReduxMainSlice";
+import { DBPost } from "../QueryMain/QueryMainRest";
 
 const Register = () => {
-  const init = useSelector((state: RootState) => state.mainSore.RegisterInput.Location.LatLanUser)
-  const [formData, setFormData] = useState({
-    fullname: '',
-    email: "",
-    password: "",
-    role: "",  
-  });
-
-  const options = [
-    {role: 'user'},
-    {role: 'admin'},
-    {role: 'curier'}
-  ]
-
-  const Curier = [
-    { freetime: 'time'},
-  ];
-
+  const user = useSelector(
+    (state: RootState) => state.mainSore.RegisterInput.RegisteredUser
+  );
+  const location = useSelector(
+    (state: RootState) => state.mainSore.RegisterInput.LatLanUser
+  );
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  console.log(init);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const options = [{ role: "user" }, { role: "admin" }, { role: "curier" }];
+
+  const curierFields = [{ freetime: "time" }];
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Registering user:", formData);
-    navigate("/");
+    console.log("Registering user:", user);
+
+    const userData = [
+      {
+        fullname: user.fullname,
+        email: user.email,
+        password: user.password,
+        role: user.role,
+        ...(user.role === "curier" ? { userlocation: location } : {}),
+      },
+    ];
+
+    try {
+      const response = await DBPost(userData); 
+      console.log("Registration successful:", response);
+      navigate("/");
+    } catch (error) {
+      console.error("Registration failed:", error);
+    }
   };
 
   return (
@@ -42,10 +53,12 @@ const Register = () => {
 
         <div className="mb-4">
           <input
-            type="type"
+            type="text"
             placeholder="Full name"
-            value={formData.fullname}
-            onChange={(e) => setFormData({ ...formData, fullname: e.target.value })}
+            value={user.fullname}
+            onChange={(e) =>
+              dispatch(RegUserEventtarget({ fullname: e.target.value }))
+            }
             required
             className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -55,9 +68,9 @@ const Register = () => {
           <input
             type="email"
             placeholder="Email"
-            value={formData.email}
+            value={user.email}
             onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
+              dispatch(RegUserEventtarget({ email: e.target.value }))
             }
             required
             className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -68,17 +81,18 @@ const Register = () => {
           <input
             type="password"
             placeholder="Password"
-            value={formData.password}
+            value={user.password}
             onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
+              dispatch(RegUserEventtarget({ password: e.target.value }))
             }
             required
             className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        {formData.role === "curier" &&
-          Curier.map((item) => (
-            <>
+
+        {user.role === "curier" &&
+          curierFields.map((item) => (
+            <div key={item.freetime}>
               <h1 className="text-center">
                 Input your maximum availability during the day
               </h1>
@@ -89,20 +103,24 @@ const Register = () => {
               <h1 className="text-center">Input suitable day to work weekly</h1>
               <input
                 type="date"
-                className="flex self-center justify-self-center "
+                className="flex self-center justify-self-center"
               />
               <LocationInput />
-            </>
+            </div>
           ))}
 
         <div className="mb-6">
           <select
-            value={formData.role}
-            onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+            value={user.role}
+            onChange={(e) =>
+              dispatch(RegUserEventtarget({ role: e.target.value }))
+            }
             className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             {options.map(({ role }) => (
-              <option value={role}>{role}</option>
+              <option key={role} value={role}>
+                {role}
+              </option>
             ))}
           </select>
         </div>
