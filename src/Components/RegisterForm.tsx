@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../ReduxMainToolkit/ReduxMainStore";
 import { RegUserEventtarget } from "../ReduxMainToolkit/ReduxMainSlice";
 import { DBPost } from "../QueryMain/QueryMainRest";
+import FormImage from "./Inputs/image/formImage";
 
 const Register = () => {
   const user = useSelector(
@@ -104,6 +105,7 @@ const Register = () => {
                 type="date"
                 className="flex self-center justify-self-center"
               />
+              <FormImage />
               <LocationInput />
             </div>
           ))}
