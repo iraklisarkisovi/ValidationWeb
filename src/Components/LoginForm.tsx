@@ -1,20 +1,35 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "./Auth";
+import { DBGetUsers } from "../QueryMain/QueryMainRest";
+ 
 
 const Login: React.FC = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const mockUser = {
-      email: formData.email,
-      role: "user",  
-    };
-    login(mockUser);
-    navigate("/dashboard");
+
+    try {
+      const users = await DBGetUsers(); 
+      const matchedUser = users.find(
+        (user: any) =>
+          user.email === formData.email && user.password === formData.password
+      );
+
+      if (matchedUser) {
+        login({ email: matchedUser.email, role: matchedUser.role });
+        alert("Login successful!");
+        navigate("/dashboard"); 
+      } else {
+        alert("Invalid email or password!");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      alert("An error occurred while logging in.");
+    }
   };
 
   return (

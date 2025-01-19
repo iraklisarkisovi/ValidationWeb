@@ -25,3 +25,17 @@ export const DBPost = async (data: any) => {
     }
   }
 };
+
+export const DBGetUsers = async () => {
+  try {
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+      },
+    });
+    return response.data.items;  
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw error;
+  }
+};
