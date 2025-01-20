@@ -1,7 +1,7 @@
-import { useState } from "react";
 import InputSolid from "../Inputs/InputSolid";
 import ButtonForm from "../Inputs/ButtonForm";
-import LocationInput from "../Inputs/GeolocationInput";
+import LocationInput from "../LocationInput";
+ 
 
 const UserForm: React.FC = () => {
   return (

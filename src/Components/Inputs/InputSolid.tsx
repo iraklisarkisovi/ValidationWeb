@@ -1,91 +1,124 @@
-import { useState } from "react";
+import React from "react";
 import Input from "./AdminInputSOLID";
+import { useDispatch, useSelector } from "react-redux";
+import { RegUserEventtarget } from "../../ReduxMainToolkit/ReduxMainSlice";
+import { RootState } from "../../ReduxMainToolkit/ReduxMainStore";
 
-const InputSolid = () => {
-    const [formState, setFormState] = useState({
-      firstName: "",
-      lastName: "",
-      pid: "",
-      phoneNumber: "",
-      email: "",
-      password: "",
-      profileImage: null, 
-    });
-    const handleFileChange = (e:any) => {
-      setFormState({ ...formState, profileImage: e.target.files[0] });
-    };
-    const handleSubmit = () => {
-        console.log(formState)
-    }
-    return (
-      <form onSubmit={handleSubmit}>
-        <Input
-          label="First Name"
-          type="text"
-          value={formState.firstName}
-          onChange={(e) =>
-            setFormState({ ...formState, firstName: e.target.value })
-          }
-        />
-        {(!formState.firstName || /^\d+$/.test(formState.firstName)) && formState.firstName.length > 0 && (
-  <p style={{ color: "red", fontSize: "12px" }}>Invalid first name</p>)}
-        <Input
-          label="Last Name"
-          type="text"
-          value={formState.lastName}
-          onChange={(e) =>
-            setFormState({ ...formState, lastName: e.target.value })
-          }
-        />
-         {(!formState.lastName || /^\d+$/.test(formState.lastName)) && formState.lastName.length > 0 && (
-  <p style={{ color: "red", fontSize: "12px" }}>Invalid last name</p>)}
-        <Input
-          label="PID"
-          type="text"
-          value={formState.pid}
-          onChange={(e) => setFormState({ ...formState, pid: e.target.value })}
-        />
-     {formState.pid && !/^\d+$/.test(formState.pid) && (
-        <p style={{ color: "red", fontSize: "12px" }}>Invalid PID</p>
-      )}
+const InputSolid: React.FC = () => {
+  const dispatch = useDispatch();
+  const initial = useSelector(
+    (state: RootState) => state.mainStore.RegisterInput.RegisteredUser
+  );
 
-        <Input
-          label="Phone Number"
-          type="text"
-          value={formState.phoneNumber}
-          onChange={(e) =>
-            setFormState({ ...formState, phoneNumber: e.target.value })
-          }
-        />
-           {formState.phoneNumber && !/^\d+$/.test(formState.phoneNumber) && (
-        <p style={{ color: "red", fontSize: "12px" }}>Invalid phone number</p>
-      )}
-        <Input
-          label="Email"
-          type="email"
-          value={formState.email}
-          onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-        />
-        {!formState.email.includes('@') && formState.email.length > 0 &&
-            <p style={{ color: "red", fontSize: "12px" }}>Invalid email</p>
-        }
-        <Input
-          label="Password"
-          type="password"
-          value={formState.password}
-          onChange={(e) =>
-            setFormState({ ...formState, password: e.target.value })
-          }
-        />
-        {formState.password.length < 8 && formState.password.length > 0 && (
-          <p style={{ color: "red", fontSize: "12px" }}>Password must be at least 8 characters</p>)}
-        <Input
-          label="Profile Image"
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-        />
-      </form>
-    );
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("Form Submitted:", initial);
   };
-  export default InputSolid;
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      dispatch(
+        RegUserEventtarget({ ...initial, profileImage: e.target.files[0] })
+      );
+    }
+  };
+
+  const isInvalidName = (name: string) =>
+    /^\d+$/.test(name) || name.length === 0;
+  const isInvalidPID = (pid: string) => pid && !/^\d+$/.test(pid);
+  const isInvalidPhone = (phone: string) => phone && !/^\d+$/.test(phone);
+  const isInvalidEmail = (email: string) =>
+    !email.includes("@") && email.length > 0;
+  const isWeakPassword = (password: string) =>
+    password.length < 8 && password.length > 0;
+
+  return (
+    <form
+      className="p-4 space-y-4 bg-gray-100 rounded-md"
+    >
+      <Input
+        label="First Name"
+        type="text"
+        value={initial.firstname}
+        onChange={(e) =>
+          dispatch(RegUserEventtarget({ firstname: e.target.value }))
+        }
+      />
+      {isInvalidName(initial.firstname) && (
+        <p className="text-xs text-red-500">Invalid first name</p>
+      )}
+
+      <Input
+        label="Last Name"
+        type="text"
+        value={initial.lastname}
+        onChange={(e) =>
+          dispatch(RegUserEventtarget({ lastname: e.target.value }))
+        }
+      />
+      {isInvalidName(initial.lastname) && (
+        <p className="text-xs text-red-500">Invalid last name</p>
+      )}
+
+      <Input
+        label="PID"
+        type="text"
+        value={initial.pid}
+        onChange={(e) => dispatch(RegUserEventtarget({ pid: e.target.value }))}
+      />
+      {isInvalidPID(initial.pid) && (
+        <p className="text-xs text-red-500">Invalid PID</p>
+      )}
+
+      <Input
+        label="Phone Number"
+        type="text"
+        value={initial.phonenumber}
+        onChange={(e) =>
+          dispatch(RegUserEventtarget({ phonenumber: e.target.value }))
+        }
+      />
+      {isInvalidPhone(initial.phonenumber) && (
+        <p className="text-xs text-red-500">Invalid phone number</p>
+      )}
+
+      <Input
+        label="Email"
+        type="email"
+        value={initial.email}
+        onChange={(e) =>
+          dispatch(RegUserEventtarget({ email: e.target.value }))
+        }
+      />
+      {isInvalidEmail(initial.email) && (
+        <p className="text-xs text-red-500">Invalid email</p>
+      )}
+
+      <Input
+        label="Password"
+        type="password"
+        value={initial.password}
+        onChange={(e) =>
+          dispatch(RegUserEventtarget({ password: e.target.value }))
+        }
+      />
+      {isWeakPassword(initial.password) && (
+        <p className="text-xs text-red-500">
+          Password must be at least 8 characters
+        </p>
+      )}
+
+      <Input
+        label="Profile Image"
+        type="file"
+        accept="image/*"
+        onChange={handleFileChange}
+      />
+      {initial.profileImage && (
+        <p className="text-xs text-green-500">Profile image selected</p>
+      )}
+    </form>
+  );
+};
+
+export default InputSolid;

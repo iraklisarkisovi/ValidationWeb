@@ -2,13 +2,16 @@ import { createSlice } from "@reduxjs/toolkit";
  
 const initialState = {
   RegisterInput: {
-    LatLanUser: {},  
+    LatLanUser: {},
     RegisteredUser: {
-      fullname: "",
+      lastname: "",
+      firstname: "",
       email: "",
       password: "",
       role: "",
       profileImage: "",
+      pid: "",
+      phonenumber: ""
     },
   },
 };

@@ -21,7 +21,6 @@ const Login: React.FC = () => {
 
       if (matchedUser) {
         login({ email: matchedUser.email, role: matchedUser.role });
-        alert("Login successful!");
         navigate("/dashboard"); 
       } else {
         alert("Invalid email or password!");

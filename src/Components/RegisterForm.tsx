@@ -1,3 +1,4 @@
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../ReduxMainToolkit/ReduxMainStore";
@@ -7,12 +8,12 @@ import CourierForm from "./Courier/CourierForm";
 import UserForm from "./User/UserForm";
 import AdminForm from "./Admin/AdminFrom";
 
-const Register = () => {
+const Register: React.FC = () => {
   const user = useSelector(
-    (state: RootState) => state.mainSore.RegisterInput.RegisteredUser
+    (state: RootState) => state.mainStore.RegisterInput.RegisteredUser
   );
   const location = useSelector(
-    (state: RootState) => state.mainSore.RegisterInput.LatLanUser
+    (state: RootState) => state.mainStore.RegisterInput.LatLanUser
   );
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -25,7 +26,9 @@ const Register = () => {
 
     const userData = [
       {
-        fullname: user.fullname,
+        fullname: user.firstname,
+        lastname: user.lastname,
+        pid: user.pid,
         email: user.email,
         password: user.password,
         role: user.role,
@@ -42,6 +45,19 @@ const Register = () => {
       console.error("Registration failed:", error);
     }
   };
+
+  const renderForm = React.useMemo(() => {
+    switch (user.role) {
+      case "user":
+        return <UserForm />;
+      case "admin":
+        return <AdminForm />;
+      case "curier":
+        return <CourierForm />;
+      default:
+        return null;
+    }
+  }, [user.role]);
 
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -67,9 +83,7 @@ const Register = () => {
           </select>
         </div>
 
-        {user.role === "user" && <UserForm />}
-        {user.role === "admin" && <AdminForm />}
-        {user.role === "curier" && <CourierForm/>}
+        {renderForm}
 
         <div>
           <button
