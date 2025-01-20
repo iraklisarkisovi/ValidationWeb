@@ -30,12 +30,13 @@ const Register = () => {
         email: user.email,
         password: user.password,
         role: user.role,
+        profileImage: user.profileImage, 
         ...(user.role === "curier" ? { userlocation: location } : {}),
       },
     ];
 
     try {
-      const response = await DBPost(userData); 
+      const response = await DBPost(userData);
       console.log("Registration successful:", response);
       navigate("/");
     } catch (error) {
