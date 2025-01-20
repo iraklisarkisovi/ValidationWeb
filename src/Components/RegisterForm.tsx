@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import LocationInput from "./LocationInput";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../ReduxMainToolkit/ReduxMainStore";
 import { RegUserEventtarget } from "../ReduxMainToolkit/ReduxMainSlice";
 import { DBPost } from "../QueryMain/QueryMainRest";
-import FormImage from "./Inputs/image/formImage";
+import CourierForm from "./Courier/CourierForm";
+import UserForm from "./User/UserForm";
+import AdminForm from "./Admin/AdminFrom";
 
 const Register = () => {
   const user = useSelector(
@@ -18,8 +19,6 @@ const Register = () => {
 
   const options = [{ role: "user" }, { role: "admin" }, { role: "curier" }];
 
-  const curierFields = [{ freetime: "time" }];
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Registering user:", user);
@@ -30,7 +29,7 @@ const Register = () => {
         email: user.email,
         password: user.password,
         role: user.role,
-        profileImage: user.profileImage, 
+        profileImage: user.profileImage,
         ...(user.role === "curier" ? { userlocation: location } : {}),
       },
     ];
@@ -52,65 +51,6 @@ const Register = () => {
       >
         <h1 className="mb-6 text-2xl font-semibold text-center">Register</h1>
 
-        <div className="mb-4">
-          <input
-            type="text"
-            placeholder="Full name"
-            value={user.fullname}
-            onChange={(e) =>
-              dispatch(RegUserEventtarget({ fullname: e.target.value }))
-            }
-            required
-            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <div className="mb-4">
-          <input
-            type="email"
-            placeholder="Email"
-            value={user.email}
-            onChange={(e) =>
-              dispatch(RegUserEventtarget({ email: e.target.value }))
-            }
-            required
-            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <div className="mb-4">
-          <input
-            type="password"
-            placeholder="Password"
-            value={user.password}
-            onChange={(e) =>
-              dispatch(RegUserEventtarget({ password: e.target.value }))
-            }
-            required
-            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        {user.role === "curier" &&
-          curierFields.map((item) => (
-            <div key={item.freetime}>
-              <h1 className="text-center">
-                Input your maximum availability during the day
-              </h1>
-              <input
-                type={item.freetime}
-                className="flex self-center mb-4 justify-self-center"
-              />
-              <h1 className="text-center">Input suitable day to work weekly</h1>
-              <input
-                type="date"
-                className="flex self-center justify-self-center"
-              />
-              <FormImage />
-              <LocationInput />
-            </div>
-          ))}
-
         <div className="mb-6">
           <select
             value={user.role}
@@ -126,6 +66,10 @@ const Register = () => {
             ))}
           </select>
         </div>
+
+        {user.role === "user" && <UserForm />}
+        {user.role === "admin" && <AdminForm />}
+        {user.role === "curier" && <CourierForm/>}
 
         <div>
           <button
