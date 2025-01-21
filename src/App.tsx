@@ -11,8 +11,6 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
-
-        {/* Wrap the dashboard route with ProtectedRoute */}
         <Route
           path="/dashboard"
           element={

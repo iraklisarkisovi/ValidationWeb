@@ -22,7 +22,7 @@ const InputSolid: React.FC = () => {
 
   return (
     <form
-      className="p-4 space-y-4 bg-gray-100 rounded-md"
+      className={`p-4 space-y-4 bg-gray-100 ${initial.role === "courier" ? "rounded-t-md": "rounded-md" }`}
     >
       <Input
         label="First Name"

@@ -13,13 +13,19 @@ const Register: React.FC = () => {
   const user = useSelector(
     (state: RootState) => state.mainStore.RegisterInput.RegisteredUser
   );
+
   const location = useSelector(
     (state: RootState) => state.mainStore.RegisterInput.LatLanUser
   );
+
+  const workDays = useSelector(
+    (state: RootState) => state.mainStore.RegisterInput.CourierWorkingdays
+  );
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const options = [{ role: "user" }, { role: "admin" }, { role: "curier" }];
+  const options = [{ role: "user" }, { role: "admin" }, { role: "courier" }];
   const [file, setFile] = useState<File | null>(null);
   React.useEffect(() => {
     if (!user.role) {
@@ -65,7 +71,14 @@ const Register: React.FC = () => {
           password: user.password,
           role: user.role,
           profileImage: data.secure_url,
-          ...(user.role === "curier" ? { userlocation: location } : {}),
+          ...(user.role === "courier"
+            ? {
+                userlocation: location,
+                vehicletype: user.vehicletype,
+                phonenum: user.phonenumber,
+                workdays: workDays,
+              }
+            : {}),
         },
       ];
   
@@ -90,7 +103,7 @@ const Register: React.FC = () => {
         return <UserForm />;
       case "admin":
         return <AdminForm />;
-      case "curier":
+      case "courier":
         return <CourierForm />;
       default:
         return null;
@@ -135,7 +148,7 @@ const Register: React.FC = () => {
           <button
             type="button"
             onClick={() => {navigate("/")}}
-            className="w-full py-3 font-semibold text-white transition duration-200 bg-red-200 rounded-md hover:bg-red-400 mt-5"
+            className="w-full py-3 mt-5 font-semibold text-white transition duration-200 bg-red-200 rounded-md hover:bg-red-400"
           >
             Back
           </button>

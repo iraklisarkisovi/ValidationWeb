@@ -1,8 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
  
+export interface WorkingDay {
+  day: string;
+  startHour: string;
+  endHour: string;
+}
+
 const initialState = {
   RegisterInput: {
     LatLanUser: {},
+    CourierWorkingdays: [] as WorkingDay[],
     RegisteredUser: {
       lastname: "",
       firstname: "",
@@ -11,7 +18,8 @@ const initialState = {
       role: "",
       profileImage: "",
       pid: "",
-      phonenumber: ""
+      phonenumber: "",
+      vehicletype: "",
     },
   },
 };
@@ -27,11 +35,15 @@ const MainReducer = createSlice({
     LatLanInput: (state, action) => {
       state.RegisterInput.LatLanUser = action.payload;
     },
+    
+    WorkingDays: (state, action: PayloadAction<WorkingDay[]>) => {
+      state.RegisterInput.CourierWorkingdays = action.payload;  
+    },
 
     RegUserEventtarget: (state, action) => {
       state.RegisterInput.RegisteredUser = {
-        ...state.RegisterInput.RegisteredUser,  
-        ...action.payload, 
+        ...state.RegisterInput.RegisteredUser,
+        ...action.payload,
       };
     },
 
@@ -45,12 +57,18 @@ const MainReducer = createSlice({
         role: "user",
         profileImage: "",
         phonenumber: "",
+        vehicletype: "",
       };
     },
   },
 });
 
 
-export const { HandleInput, LatLanInput, RegUserEventtarget, clearRegisterInput } =
-  MainReducer.actions;
+export const {
+  WorkingDays,
+  HandleInput,
+  LatLanInput,
+  RegUserEventtarget,
+  clearRegisterInput,
+} = MainReducer.actions;
 export const MainRed = MainReducer.reducer;

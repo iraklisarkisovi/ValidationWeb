@@ -13,9 +13,15 @@ const FormImage: React.FC<FormImageProps> = ({ onFileChange }) => {
   };
 
   return (
-    <div style={{ marginBottom: "15px" }}>
-      <label>Upload a picture</label>
-      <input type="file" onChange={handleFileChange} />
+    <div className="flex flex-col items-start justify-around m-5">
+      <div className={"flex flex-row justify-between items-left mb-3"}>
+        <label>Upload your profile picture</label>
+        <h1 className="ml-5 font-thin text-gray-500">Optional</h1>
+      </div>
+      <input
+        type="file"
+        onChange={handleFileChange}
+      />
     </div>
   );
 };
