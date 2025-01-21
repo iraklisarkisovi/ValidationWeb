@@ -34,10 +34,23 @@ const MainReducer = createSlice({
         ...action.payload, 
       };
     },
+
+    clearRegisterInput: (state) => {
+      state.RegisterInput.RegisteredUser = {
+        firstname: "",
+        lastname: "",
+        pid: "",
+        email: "",
+        password: "",
+        role: "user",
+        profileImage: "",
+        phonenumber: "",
+      };
+    },
   },
 });
 
 
-export const { HandleInput, LatLanInput, RegUserEventtarget } =
+export const { HandleInput, LatLanInput, RegUserEventtarget, clearRegisterInput } =
   MainReducer.actions;
 export const MainRed = MainReducer.reducer;

@@ -1,9 +1,7 @@
 import React from 'react'
 import InputSolid from '../Inputs/InputSolid'
 import VehicleInput from '../Inputs/VehicleInput'
-import ButtonForm from '../Inputs/ButtonForm'
 import WorkingHours from '../Inputs/WorkingHours'
-import LocationInput from '../LocationInput'
 
 
 const CourierForm:React.FC = () => {
@@ -12,8 +10,6 @@ const CourierForm:React.FC = () => {
       <InputSolid />
       <VehicleInput />
       <WorkingHours />
-      <LocationInput />
-      <ButtonForm />
     </>
   );
 }

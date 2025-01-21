@@ -10,19 +10,7 @@ const InputSolid: React.FC = () => {
     (state: RootState) => state.mainStore.RegisterInput.RegisteredUser
   );
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Form Submitted:", initial);
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      dispatch(
-        RegUserEventtarget({ ...initial, profileImage: e.target.files[0] })
-      );
-    }
-  };
-
+  
   const isInvalidName = (name: string) =>
     /^\d+$/.test(name) || name.length === 0;
   const isInvalidPID = (pid: string) => pid && !/^\d+$/.test(pid);
@@ -108,15 +96,6 @@ const InputSolid: React.FC = () => {
         </p>
       )}
 
-      <Input
-        label="Profile Image"
-        type="file"
-        accept="image/*"
-        onChange={handleFileChange}
-      />
-      {initial.profileImage && (
-        <p className="text-xs text-green-500">Profile image selected</p>
-      )}
     </form>
   );
 };
