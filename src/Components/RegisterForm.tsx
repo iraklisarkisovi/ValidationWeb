@@ -64,7 +64,7 @@ const Register: React.FC = () => {
 
       const userData = [
         {
-          fullname: user.firstname,
+          firstname: user.firstname,
           lastname: user.lastname,
           pid: user.pid,
           email: user.email,
@@ -111,7 +111,7 @@ const Register: React.FC = () => {
   }, [user.role]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex items-center justify-center min-h-screen m-10">
       <form
         onSubmit={handleSubmit}
         className="max-w-md p-8 mx-auto bg-white rounded-lg shadow-lg"

@@ -21,13 +21,23 @@ const initialState = {
       phonenumber: "",
       vehicletype: "",
     },
+    
   },
+  ThemeChanger: false
 };
 
 const MainReducer = createSlice({
   name: "MainR",
   initialState,
   reducers: {
+    ThemeChange: state => {
+      if(state.ThemeChanger){
+        state.ThemeChanger = false
+      }else{
+        state.ThemeChanger = true;
+      }
+    },
+
     HandleInput: (state, action) => {
       state.RegisterInput = action.payload;
     },
@@ -65,6 +75,7 @@ const MainReducer = createSlice({
 
 
 export const {
+  ThemeChange,
   WorkingDays,
   HandleInput,
   LatLanInput,
